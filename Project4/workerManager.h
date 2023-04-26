@@ -1,5 +1,7 @@
 #pragma once
 #include<iostream>
+#include<fstream>
+#define FILENAME "employee.txt"
 using namespace std;
 #include<string>
 #include"worker.h"
@@ -16,6 +18,11 @@ public:
 	int m_EmpNum;
 	Worker** m_EmpArray;
 	void addEmp();
+	void save();
+	bool m_FileIsEmpty;
+	int getEmpNum();
+	void initEmp();
+
 
 
 
