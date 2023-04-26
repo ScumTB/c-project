@@ -23,6 +23,10 @@ public:
 	int getEmpNum();
 	void initEmp();
 	void showEmp();
+	void delEmp();
+	int isExist(int id);
+	void mod_Emp();
+	void find_Emp();
 
 
 

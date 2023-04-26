@@ -114,7 +114,7 @@ void WorkerManager::addEmp() {
 	cin >> num;
 	if (num > 0) {
 		int newSize = this->m_EmpNum + num;
-		Worker** newSpace = new Worker* [newSize*4]; //没有解决内存溢出问题  newSize
+		Worker** newSpace = new Worker * [newSize]; //没有解决内存溢出问题  newSize
 		if (this->m_EmpArray != NULL) {
 			for (int i = 0; i < m_EmpNum; i++) {
 				newSpace[i] = this->m_EmpArray[i];
@@ -149,12 +149,12 @@ void WorkerManager::addEmp() {
 				break;
 
 			}
-			if (sizeof(newSpace) <= sizeof(newSize))
-			{
-				newSpace[this->m_EmpNum + i] = wk;
-			}
 			
-			//delete[] this->m_EmpArray;
+			
+				newSpace[this->m_EmpNum + i] = wk;
+			
+			
+			delete[] this->m_EmpArray;
 			this->m_EmpArray = newSpace;
 			this->m_EmpNum = newSize;
 			this->save();
@@ -170,15 +170,51 @@ void WorkerManager::addEmp() {
 		cout << "wrong again" << endl;
 	}
 }
-void WorkerManager::save() {
+//void WorkerManager::save() {
+//	ofstream ofs;
+//	ofs.open("employee.txt", ios::out);
+//	for (int i = 0; i < this->m_EmpNum; i++) {
+//		ofs << this->m_EmpArray[i]->id << " "<< this->m_EmpArray[i]->name << " " << this->m_EmpArray[i]->dId << endl;
+//	}
+//	ofs.close();
+//
+//}
+
+void WorkerManager::save()
+{
 	ofstream ofs;
-	ofs.open("employee.txt", ios::out);
-	for (int i = 0; i < this->m_EmpNum; i++) {
-		ofs << this->m_EmpArray[i]->id << this->m_EmpArray[i]->name << this->m_EmpArray[i]->dId << endl;
+	ofs.open(FILENAME, ios::out);//用输出方式打开文件--写文件
+
+	//这里好像-------------不能加一
+	for (int i = 0; i < this->m_EmpNum; i++)
+	{
+		ofs << this->m_EmpArray[i]->id << " "
+			<< this->m_EmpArray[i]->name << " "
+			<< this->m_EmpArray[i]->dId << " " << endl;
 	}
+	//关闭文件
 	ofs.close();
+}
+void WorkerManager::find_Emp() {
+
+
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void WorkerManager::showMenu() {
 	cout << "欢迎使用职工管理系统" << endl;
@@ -199,6 +235,86 @@ void WorkerManager::exitSystem() {
 	exit(0);
 
 }
+
+int WorkerManager::isExist(int id) {
+	int index = -1;
+
+	for (int i = 0; i < this->m_EmpNum; i++) {
+		if (this->m_EmpArray[i]->id == id) {
+			index = i;
+		break;
+			
+		}
+	
+	}
+		return index;
+
+
+}
+void WorkerManager::delEmp() {
+	if (this->m_FileIsEmpty) {
+		cout << "文件为空" << endl;
+
+	}
+	else {
+		cout << "输入你要删除第几个人从上往下" << endl;
+		int b;
+		cin >> b;
+		int a = b - 1;
+		for (int i = a; i < this->m_EmpNum; i++) {
+			this->m_EmpArray[i] = this->m_EmpArray[i + 1];
+		}
+		cout << "删除玩成" << endl;
+	}
+	this->m_EmpNum--;
+	this->save();
+}
+void WorkerManager::mod_Emp() {
+	cout << "请输入修改职工编号" << endl;
+	int id;
+	cin >> id;
+	int ret = this->isExist(id);
+	if (ret != -1) {
+
+		delete this->m_EmpArray[ret];
+		int newId=0;
+		string newName=" ";
+		int dSelect = 0;
+		cout << "查到" << id << "输入新的" << endl;
+		cin >> newId;
+		cin >> newName;
+		cin >> dSelect;
+
+		Worker* worker = NULL;
+		switch (dSelect) {
+
+		case 1:
+			worker = new Employee(newId, newName, dSelect);
+			break;
+		case 2:
+			worker = new Manager(newId, newName, dSelect);
+			break;
+		case 3:
+			worker = new Boss(newId, newName, dSelect);
+			break;
+
+
+
+
+
+		}
+		this->m_EmpArray[ret] = worker;
+		cout << "修改成功" << endl;
+
+
+
+		this->save();
+
+	}
+	    system("pause");
+		system("cls");
+}
+
 
 
 WorkerManager::~WorkerManager(){
