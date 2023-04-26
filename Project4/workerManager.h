@@ -22,6 +22,7 @@ public:
 	bool m_FileIsEmpty;
 	int getEmpNum();
 	void initEmp();
+	void showEmp();
 
 
 

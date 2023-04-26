@@ -43,6 +43,28 @@ WorkerManager::WorkerManager() {
 
 }
 
+void WorkerManager::showEmp() {
+	if (this->m_FileIsEmpty) {
+
+		cout << "文件不存在或为空" << endl;
+	}
+	else {
+
+
+		for (int i = 0; i < this->m_EmpNum; i++) {
+
+			this->m_EmpArray[i]->showInfo();
+			
+		}
+
+	}
+	system("pause");
+	system("cls");
+
+
+
+}
+
 void WorkerManager::initEmp() {
 	ifstream ifs;
 	ifs.open(FILENAME, ios::in);
@@ -92,13 +114,11 @@ void WorkerManager::addEmp() {
 	cin >> num;
 	if (num > 0) {
 		int newSize = this->m_EmpNum + num;
-		Worker** newSpace = new Worker* [newSize];
-		if (this->m_EmpArray != 0) {
+		Worker** newSpace = new Worker* [newSize*4]; //没有解决内存溢出问题  newSize
+		if (this->m_EmpArray != NULL) {
 			for (int i = 0; i < m_EmpNum; i++) {
 				newSpace[i] = this->m_EmpArray[i];
-
-			}
-		
+			}		
 		}
 		for (int i = 0; i < num; i++) {
 			int id;
@@ -113,24 +133,28 @@ void WorkerManager::addEmp() {
 			cout << "2.经理岗位" << endl;
 			cout << "3.老板岗位" << endl;
 			cin >> dSelect;
-				Worker * worker = NULL;//******
+				Worker * wk = NULL;//******
 			switch (dSelect) {
 			case 1:
-				worker = new Employee(id, name, 3);
+				wk = new Employee(id, name, 1);
 				break;
 			case 2:
-				worker = new Manager(id, name, 3);
+				wk = new Manager(id, name, 2);
 				break;
 			case 3:
-				worker = new Boss(id, name, 3);
+				wk = new Boss(id, name, 3);
 				break;
 			default:
 				cout << "weong" << endl;
 				break;
 
 			}
-			newSpace[this->m_EmpNum + i] = worker;
-			delete[] this->m_EmpArray;
+			if (sizeof(newSpace) <= sizeof(newSize))
+			{
+				newSpace[this->m_EmpNum + i] = wk;
+			}
+			
+			//delete[] this->m_EmpArray;
 			this->m_EmpArray = newSpace;
 			this->m_EmpNum = newSize;
 			this->save();
@@ -138,23 +162,13 @@ void WorkerManager::addEmp() {
 			system("pause");
 			system("cls");
 
-			
-
-			
-
 		}
 
-
-
-	
 	
 	}
 	else {
-
-
 		cout << "wrong again" << endl;
 	}
-
 }
 void WorkerManager::save() {
 	ofstream ofs;
@@ -166,20 +180,17 @@ void WorkerManager::save() {
 
 }
 
-
-
-
 void WorkerManager::showMenu() {
-	cout << " * ****************" << endl;
-	cout << " * ***0. exit*********" << endl;
-	cout << " * ***1. add em********" << endl;
-	cout << " * ***2. display********" << endl;
-	cout << " * ***3. del*****" << endl;
-	cout << " * ***4. modify*********" << endl;
-	cout << " * ***5. find********" << endl;
-	cout << " * ***6. sort********" << endl;
-	cout << " * ***7. clear*********" << endl;
-	cout << " * ****************" << endl;
+	cout << "欢迎使用职工管理系统" << endl;
+	cout << "0、退出管理程序" << endl;
+	cout << "1、增加职工信息" << endl;
+	cout << "2、显示职工信息" << endl;
+	cout << "3、删除离职职工信息" << endl;
+	cout << "4、修改职工信息" << endl;
+	cout << "5、查找职工信息" << endl;
+	cout << "6、按照编号排序" << endl;
+	cout << "7、清空所有文档" << endl;
+	cout << endl;
 
 }
 void WorkerManager::exitSystem() {
