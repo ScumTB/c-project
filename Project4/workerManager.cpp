@@ -185,22 +185,87 @@ void WorkerManager::save()
 	ofstream ofs;
 	ofs.open(FILENAME, ios::out);//用输出方式打开文件--写文件
 
-	//这里好像-------------不能加一
+	//----------------这里好像-------------不能加一
 	for (int i = 0; i < this->m_EmpNum; i++)
 	{
-		ofs << this->m_EmpArray[i]->id << " "
-			<< this->m_EmpArray[i]->name << " "
-			<< this->m_EmpArray[i]->dId << " " << endl;
+		ofs << this->m_EmpArray[i]->id << " " << this->m_EmpArray[i]->name << " " << this->m_EmpArray[i]->dId << " " << endl;
 	}
 	//关闭文件
 	ofs.close();
 }
-void WorkerManager::find_Emp() {
+//查找职工
+void WorkerManager::find_Emp()
+{
+	if (this->m_FileIsEmpty)
+	{
+		cout << "文件不存在或记录为空！" << endl;
+	}
+	else
+	{
+		cout << "请输入查找的方式：" << endl;
+		cout << "1、按职工编号查找" << endl;
+		cout << "2、按姓名查找" << endl;
+
+		int select = 0;
+		cin >> select;
 
 
+		if (select == 1) //按职工号查找
+		{
+			int id;
+			cout << "请输入查找的职工编号：" << endl;
+			cin >> id;
+
+			int ret = isExist(id);
+			if (ret != -1)
+			{
+				cout << "查找成功！该职工信息如下：" << endl;
+				this->m_EmpArray[ret]->showInfo();
+			}
+			else
+			{
+				cout << "查找失败，查无此人" << endl;
+			}
+		}
+		else if (select == 2) //按姓名查找
+		{
+			string name;
+			cout << "请输入查找的姓名：" << endl;
+			cin >> name;
+
+			bool flag = false;  //查找到的标志
+			for (int i = 0; i < m_EmpNum; i++)
+			{
+				if (m_EmpArray[i]->name == name)
+				{
+					cout << "查找成功,职工编号为："
+						<< m_EmpArray[i]->id
+						<< " 号的信息如下：" << endl;
+
+					flag = true;
+
+					this->m_EmpArray[i]->showInfo();
+				}
+			}
+			if (flag == false)
+			{
+				//查无此人
+				cout << "查找失败，查无此人" << endl;
+			}
+		}
+		else
+		{
+			cout << "输入选项有误" << endl;
+		}
+	}
 
 
+	system("pause");
+	system("cls");
 }
+
+
+
 
 
 
@@ -224,8 +289,7 @@ void WorkerManager::showMenu() {
 	cout << "3、删除离职职工信息" << endl;
 	cout << "4、修改职工信息" << endl;
 	cout << "5、查找职工信息" << endl;
-	cout << "6、按照编号排序" << endl;
-	cout << "7、清空所有文档" << endl;
+
 	cout << endl;
 
 }

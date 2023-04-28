@@ -45,11 +45,9 @@ int main() {
 			wm.mod_Emp();
 			break;
 		case 5:
+			wm.find_Emp();
 			break;
-		case 6:
-			break;
-		case 7:
-			break;
+
 		default:
 			cout << "wrong againg" << endl;
 			system("cls");
